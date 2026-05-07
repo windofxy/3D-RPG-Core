@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MouseManager : Singleton<MouseManager>
 {
@@ -9,6 +10,12 @@ public class MouseManager : Singleton<MouseManager>
     public event Action<GameObject> OnEnemyClicked;
 
     RaycastHit hitInfo;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        DontDestroyOnLoad(this);
+    }
 
     // Start is called before the first frame update
     void Start()

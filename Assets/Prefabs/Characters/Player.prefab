@@ -1743,6 +1743,7 @@ GameObject:
   - component: {fileID: 5056933297589813270}
   - component: {fileID: 2066896392759191996}
   - component: {fileID: 5469501758718149700}
+  - component: {fileID: 5469501758366517893}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1758,7 +1759,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6289423731537919831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.20289044, y: 0.47968864, z: 6.261159}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1867,6 +1868,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486380fa6631bf94db0ee38edbbab521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5469501758366517893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6289423731537919831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03845a6ab1f018e4e94964deebfcecbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelUI: {fileID: 0}
+  healthBarUI: {fileID: 0}
+  expBarUI: {fileID: 0}
 --- !u!1 &6289423731537919833
 GameObject:
   m_ObjectHideFlags: 0

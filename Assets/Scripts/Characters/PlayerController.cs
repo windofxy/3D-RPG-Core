@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(CharacterStats))]
 public class PlayerController : MonoBehaviour, IEndGameObserver
 {
     // 组件变量
@@ -37,14 +38,14 @@ public class PlayerController : MonoBehaviour, IEndGameObserver
     void OnEnable()
     {
         GameManager.Instance.AddEndGameObserver(this);
+
+        MouseManager.Instance.OnMouseClicked += MoveToTarget;
+        MouseManager.Instance.OnEnemyClicked += EnemyClicked;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        MouseManager.Instance.OnMouseClicked += MoveToTarget;
-        MouseManager.Instance.OnEnemyClicked += EnemyClicked;
-
         // 将玩家注册到GameManager
         GameManager.Instance.RegisterPlayer(characterStats);
     }
@@ -65,7 +66,10 @@ public class PlayerController : MonoBehaviour, IEndGameObserver
 
     void OnDisable()
     {
-        GameManager.Instance?.RemoveEndGameObserver(this);
+        MouseManager.Instance.OnMouseClicked -= MoveToTarget;
+        MouseManager.Instance.OnEnemyClicked -= EnemyClicked;
+
+        GameManager.Instance.RemoveEndGameObserver(this);
     }
 
     public void MoveToTarget(Vector3 target)
@@ -182,6 +186,8 @@ public class PlayerController : MonoBehaviour, IEndGameObserver
             var rock = attackTarget.GetComponent<Projectile_Rock>();
             if (rock && rock.rockStates == Projectile_Rock.Projectile_Rock_States.HitNothing)
             {
+                // 设置石头攻击者
+                rock.attacker = characterStats;
                 // 更新石头状态
                 rock.rockStates = Projectile_Rock.Projectile_Rock_States.HitEnemy;
                 // 设置石头初速度

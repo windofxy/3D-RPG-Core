@@ -13,6 +13,10 @@ public class Golem : EnemyController
     public GameObject rockPrefab;
     public Transform handPos;
 
+    #region 私有变量
+    GameObject currentRock = null;
+    #endregion
+
     // 击退并伤害攻击目标
     public void KickOff()
     {
@@ -30,16 +34,47 @@ public class Golem : EnemyController
         attackTarget.GetComponent<NavMeshAgent>().velocity = kickOffVector;
     }
 
+    // 生成石头
+    public void SpawnRock()
+    {
+        if (currentRock != null && !currentRock.IsDestroyed())
+        {
+            Destroy(currentRock);
+            currentRock = null;
+        }
+        // 实例化石头
+        currentRock = Instantiate(rockPrefab, handPos.position, Quaternion.identity);
+        currentRock.transform.SetParent(handPos);
+        currentRock.transform.localPosition = Vector3.zero;
+        currentRock.transform.localRotation = Quaternion.identity;
+    }
+
     // 扔石头
     public void ThrowRock()
     {
         if (attackTarget == null || attackTarget.IsDestroyed())
+        {
+            if (currentRock != null && !currentRock.IsDestroyed())
+            {
+                Destroy(currentRock);
+            }
+            currentRock = null;
             return;
+        }
+
         // 朝向目标
         transform.LookAt(attackTarget.transform);
-        // 实例化石头
-        var rock = Instantiate(rockPrefab, handPos.position, Quaternion.identity);
+        // 获取石头组件
+        var rock = currentRock.GetComponent<Projectile_Rock>();
+        rock.transform.SetParent(null);
+        // 设置攻击者
+        rock.attacker = characterStats;
         // 设置目标
-        rock.GetComponent<Projectile_Rock>().target = attackTarget;
+        rock.target = attackTarget;
+        // 更新石头状态
+        rock.rockStates = Projectile_Rock.Projectile_Rock_States.HitPlayer;
+        rock.FlyToTarget();
+        // 取消石头
+        currentRock = null;
     }
 }

@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour, IEndGameObserver
     // 组件变量
     private NavMeshAgent agent;
     private Animator anim;
-    private CharacterStats characterStats;
+    protected CharacterStats characterStats;
     private Collider coll;
 
     #region 保护变量

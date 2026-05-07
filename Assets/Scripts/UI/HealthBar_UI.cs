@@ -31,7 +31,7 @@ public class HealthBar_UI : MonoBehaviour
     void Awake()
     {
         healthBarCanvas = GameObject.Find("HealthBar Canvas").GetComponent<Canvas>();
-        currentStats = GetComponent<CharacterStats>();
+        currentStats = gameObject.GetComponent<CharacterStats>();
     }
 
     void OnEnable()
@@ -42,7 +42,7 @@ public class HealthBar_UI : MonoBehaviour
         currentHealthSlider = uiBarTransform.GetChild(1).GetComponent<Image>();
         uiBarTransform.gameObject.SetActive(alwaysVisible);
 
-        currentStats.TakeDamaged += UpdateHealthBar;
+        currentStats.TakeDamaged += OnTakeDamaged;
     }
 
     void LateUpdate()
@@ -68,7 +68,7 @@ public class HealthBar_UI : MonoBehaviour
         }
     }
 
-    private void UpdateHealthBar(int currentHealth, int maxHealth)
+    private void OnTakeDamaged(int currentHealth, int maxHealth)
     {
         if (currentHealth <= 0)
         {

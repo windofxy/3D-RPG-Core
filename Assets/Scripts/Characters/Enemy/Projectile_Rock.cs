@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +17,7 @@ public class Projectile_Rock : MonoBehaviour
 
     #region 组件变量
     private Rigidbody rb;
+    private new Collider collider;
     #endregion
 
     #region 枚举
@@ -25,6 +27,8 @@ public class Projectile_Rock : MonoBehaviour
     #region 公有变量
     [HideInInspector]
     public GameObject target;
+    [HideInInspector]
+    public CharacterStats attacker;
     [HideInInspector]
     public Projectile_Rock_States rockStates;
     #endregion
@@ -37,14 +41,16 @@ public class Projectile_Rock : MonoBehaviour
     {
         // 获取 Rigidbody 组件
         rb = GetComponent<Rigidbody>();
-        rockStates = Projectile_Rock_States.HitPlayer;
+        // 获取 Collider 组件
+        collider = GetComponent<Collider>();
+        rockStates = Projectile_Rock_States.HitNothing;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        rb.velocity = Vector3.one;
-        FlyToTarget();
+        rb.isKinematic = true;
+        collider.enabled = false;
     }
 
     void FixedUpdate()
@@ -59,6 +65,10 @@ public class Projectile_Rock : MonoBehaviour
 
     public void FlyToTarget()
     {
+        rb.isKinematic = false;
+        collider.enabled = true;
+        // 给一个初始速度
+        rb.velocity = Vector3.one;
         // 计算玩家方向
         direction = (target.transform.position - transform.position + Vector3.up).normalized;
         // 给 Rigidbody 添加朝向玩家方向的力
@@ -78,16 +88,16 @@ public class Projectile_Rock : MonoBehaviour
                     // 播放击晕动画
                     collision.gameObject.GetComponent<Animator>().SetTrigger("Dizzy");
                     // 造成伤害
-                    collision.gameObject.GetComponent<CharacterStats>().TakeDamage(damage, out bool _);
+                    collision.gameObject.GetComponent<CharacterStats>().TakeDamage(damage, out bool _, attacker);
                     // 更新石头状态
                     rockStates = Projectile_Rock_States.HitNothing;
                 }
                 break;
             case Projectile_Rock_States.HitEnemy:
-                if (collision.gameObject.GetComponent<Golem>())
+                if (collision.gameObject.CompareTag("Enemy"))
                 {
                     // 造成伤害
-                    collision.gameObject.GetComponent<CharacterStats>().TakeDamage(damage, out bool _);
+                    collision.gameObject.GetComponent<CharacterStats>().TakeDamage(damage, out bool _, attacker);
                     // 更新石头状态
                     rockStates = Projectile_Rock_States.HitNothing;
                     // 播放粒子效果

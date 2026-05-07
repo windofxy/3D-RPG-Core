@@ -241,7 +241,6 @@ MonoBehaviour:
   healthBarUIPrefab: {fileID: 8418454099609908722, guid: 36e450ac8c2a71748a79dd8cb2854e41, type: 3}
   barPoint: {fileID: 2668570031923303195}
   lerpTime: 0.5
-  lerpSpeed: 2
   alwaysVisible: 0
   visibleTime: 5
 --- !u!1 &3339877642140951619
